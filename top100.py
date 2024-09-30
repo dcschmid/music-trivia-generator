@@ -111,9 +111,9 @@ def get_discogs_album_cover(artist, album):
 
 def get_lastfm_album_cover(artist, album):
     """
-    Get the album cover image from Last.FM.
+    Get the album cover image from Last.fm.
 
-    This function uses the Last.FM API to search for the album and retrieve the cover image.
+    This function uses the Last.fm API to search for the album and retrieve the cover image.
     If no cover image is found, None is returned.
 
     Args:
@@ -123,20 +123,26 @@ def get_lastfm_album_cover(artist, album):
     Returns:
         str: The URL of the album cover image.
     """
-    # Construct the Last.FM API URL
     url = f"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={LASTFM_API_KEY}&artist={artist}&album={album}&format=json"
-    # Get the response from the API
-    response = requests.get(url)
-    if response.status_code == 200:
-        # Parse the response as JSON
-        data = response.json()
-        # Check if the album has a cover image
-        if 'album' in data and 'image' in data['album']:
-            # Iterate over the images and return the largest one
-            for image in data['album']['image']:
-                if image['size'] == 'extralarge':
-                    return image['#text']
-    # Return None if no cover image is found
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            try:
+                # Parse the JSON response
+                data = response.json()
+                # Check if the album has a cover image
+                if 'album' in data and 'image' in data['album']:
+                    # Iterate over the available image sizes
+                    for image in data['album']['image']:
+                        if image['size'] == 'extralarge':
+                            # Return the URL of the largest available image
+                            return image['#text']
+            except ValueError:
+                print(f"Error parsing JSON response from Last.fm for {artist} - {album}")
+        else:
+            print(f"Error retrieving data from Last.fm for {artist} - {album}. Status Code: {response.status_code}")
+    except Exception as e:
+        print(f"Error retrieving data from Last.fm: {e}")
     return None
 
 def get_spotify_album_cover(artist, album):

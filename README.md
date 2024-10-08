@@ -1,14 +1,14 @@
 # Music Trivia Generator
 
-This Python script generates trivia questions for various music albums, automatically downloads album covers, and stores the questions along with album metadata in JSON format. It uses multiple sources to fetch album cover art, including Last.fm, Spotify, Discogs, and TheAudioDB.
+This Python script generates trivia questions for various music albums based on the artist, album title, and release year. It uses OpenAI’s API to create questions across multiple categories and difficulty levels, storing the trivia questions and metadata in JSON format.
 
 ## Features
 
-- Automatically generates trivia questions for music albums using OpenAI’s GPT-4.
-- Downloads album covers from various APIs like Last.fm, Spotify, Discogs, and TheAudioDB.
-- Supports trivia questions for various difficulty levels (easy, medium, hard).
+- Automatically generates trivia questions for music albums using OpenAI’s GPT model.
+- Supports trivia questions for three difficulty levels (easy, medium, hard).
+- Randomizes trivia question categories to ensure variety.
+- Ensures each category is used at least once for each difficulty level.
 - Stores trivia questions and album information in JSON format for easy integration with other systems.
-- Logs missing album covers for manual follow-up.
 
 ## Prerequisites
 
@@ -16,16 +16,13 @@ Before running the script, you need to have the following:
 
 - Python 3.x
 - OpenAI API Key
-- Last.fm API Key
-- Spotify API credentials (Client ID and Client Secret)
-- Discogs API Token (optional)
 
 ## Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/music-trivia-generator.git
+git clone https://github.com/dcschmid/music-trivia-generator
 cd music-trivia-generator
 ```
 
@@ -48,10 +45,6 @@ pip install -r requirements.txt
 
 ```bash
 OPENAI_API_KEY=your-openai-api-key
-LASTFM_API_KEY=your-lastfm-api-key
-SPOTIFY_CLIENT_ID=your-spotify-client-id
-SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
-DISCOGS_API_TOKEN=your-discogs-token (optional)
 ```
 
 ## Usage
@@ -83,16 +76,12 @@ The script will generate trivia questions for each album and save album covers i
 ## How It Works
 
 1. Reading Album Data: The script reads a text file containing a list of albums in the format: Artist - Album - Year.
-2. Cover Art Fetching:
-  - The script first tries to fetch album covers from Last.fm.
-  - If unavailable, it falls back to Spotify, Discogs, and TheAudioDB.
-  - If no cover is found, it logs the missing album in a text file (missing_covers.txt).
-3. Trivia Generation: For each album, the script uses OpenAI’s GPT-4 to generate trivia questions for three difficulty levels (easy, medium, hard). Each question includes:
+2. Trivia Generation: For each album, the script uses OpenAI’s GPT-4 to generate trivia questions for three difficulty levels (easy, medium, hard). Each question includes:
   - The question itself.
   - Four possible answer options.
   - The correct answer.
   - A detailed trivia explanation.
-4. Saving Results: The script stores the generated trivia, album information, and cover art path in a JSON file named {genre}.json.
+3. Saving Results: The script stores the generated trivia, album information, and cover art path in a JSON file named {genre}.json.
 
 ## Example JSON Output
 
@@ -118,7 +107,3 @@ The output JSON will look like this:
   }
 }
 ```
-
-## Logging Missing Covers
-
-If the script fails to fetch an album cover, it logs the missing cover in a file called missing_covers.txt. This file includes the artist, album, and release year for manual follow-up.

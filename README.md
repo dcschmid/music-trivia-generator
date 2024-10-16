@@ -1,21 +1,37 @@
 # Music Trivia Generator
 
-This Python script generates trivia questions for various music albums based on the artist, album title, and release year. It uses OpenAI’s API to create questions across multiple categories and difficulty levels, storing the trivia questions and metadata in JSON format.
+This project generates trivia questions for music albums based on the artist, album title, and release year. Trivia questions are categorized into three difficulty levels (easy, medium, hard) and are stored in JSON files. The script utilizes the OpenAI API to generate trivia questions.
 
 ## Features
 
-- Automatically generates trivia questions for music albums using OpenAI’s GPT model.
-- Supports trivia questions for three difficulty levels (easy, medium, hard).
-- Randomizes trivia question categories to ensure variety.
-- Ensures each category is used at least once for each difficulty level.
-- Stores trivia questions and album information in JSON format for easy integration with other systems.
+- Trivia Generation: Automatically generates trivia questions for albums based on various categories like Chart Success, Song Lyrics, Production, and Historical Impact.
+
+- Multi-Level Difficulty: Trivia questions are grouped into easy, medium, and hard difficulty levels.
+
+- Wide Range of Categories: Questions cover a variety of music-related categories such as:
+
+  - Song lyrics and meanings
+  - Collaborations with other artists
+  - Social and political relevance
+  - Visual elements (music videos, album art, etc.)
+  - Recording techniques and production elements
+  - Fan reactions, awards, and chart success
+
+- Randomized Question Formulation: The script dynamically generates questions with varied sentence structures to ensure each question is unique.
+
+- Support for Multiple Albums and Genres: You can process entire directories of text files, each representing a different genre, containing lists of albums.
+
+- Persistence: Generated trivia is saved in JSON format, allowing it to be reused and extended over time.
+
+- Seamless File Handling: The script automatically processes files from an input directory, writes output to a specified directory, and moves completed files to a “finished” directory.
 
 ## Prerequisites
 
 Before running the script, you need to have the following:
 
-- Python 3.x
-- OpenAI API Key
+1. Python 3.8+: Ensure that you have Python 3.8 or a more recent version installed.
+2. OpenAI API Key: An OpenAI API key is required to generate the trivia questions. You can sign up for the API here.
+3. Environment Variables: The API key and other sensitive information should be stored in a .env file.
 
 ## Installation
 
@@ -49,15 +65,35 @@ OPENAI_API_KEY=your-openai-api-key
 
 ## Usage
 
-The script takes two command-line arguments: a text file containing album data and the genre name for cover storage.
+The script processes text files containing lists of albums. For each album, it generates trivia questions, saves them to a corresponding JSON file, and moves the processed files to a “finished” directory.
 
-1. Prepare a text file with the format:
+### Command-Line Usage
+
+To run the script, use the following command:
+
+```bash
+python top100.py <input_dir> <output_json_dir> <finished_dir>
+```
+
+- <input_dir>: The directory containing text files with album data.
+- <output_json_dir>: The directory where the generated JSON files will be saved.
+- <finished_dir>: The directory where processed text files will be moved after completion.
+
+#### Example
+
+```bash
+python top100.py ./top100-files ./json-output ./finished
+```
+
+#### Input File Format
+
+Each input text file should contain a list of albums, with each line formatted as follows:
 
 ```bash
 Artist Name - Album Title - Release Year
 ```
 
-Example (top100_albums.txt):
+For example:
 
 ```bash
 Jacques Brel - Ne Me Quitte Pas - 1972
@@ -65,45 +101,42 @@ Stromae - Racine Carrée - 2013
 Gotye - Making Mirrors - 2011
 ```
 
-2. Run the script with the file path and genre:
+### Output File Format
 
-```bash
-python3 top100.py top100_albums.txt "pop"
-```
-
-The script will generate trivia questions for each album and save album covers in the bandcover/{genre}/ directory.
-
-## How It Works
-
-1. Reading Album Data: The script reads a text file containing a list of albums in the format: Artist - Album - Year.
-2. Trivia Generation: For each album, the script uses OpenAI’s GPT-4 to generate trivia questions for three difficulty levels (easy, medium, hard). Each question includes:
-  - The question itself.
-  - Four possible answer options.
-  - The correct answer.
-  - A detailed trivia explanation.
-3. Saving Results: The script stores the generated trivia, album information, and cover art path in a JSON file named {genre}.json.
-
-## Example JSON Output
-
-The output JSON will look like this:
+The script generates a JSON file for each genre (based on the input file names) containing trivia questions for each album. The output file format is as follows:
 
 ```json
 {
-  "artist": "Stromae",
-  "album": "Racine Carrée",
-  "year": "2013",
-  "coverSrc": "/bandcover/pop/stromae_racine_carree.jpg",
-  "questions": {
-    "easy": [
-      {
-        "question": "Which song from Stromae's album 'Racine Carrée' became a global hit?",
-        "options": ["Papaoutai", "Formidable", "Tous les mêmes", "Ta fête"],
-        "correctAnswer": "Papaoutai",
-        "trivia": "'Papaoutai' is one of Stromae's most successful songs from 'Racine Carrée', released in 2013. It addresses the theme of absent fathers and became an international hit, topping charts across Europe."
-      }
-    ],
-    "medium": [...],
-    "hard": [...]
-  }
+    "artist": "The Beatles",
+    "album": "Abbey Road",
+    "year": "1969",
+    "questions": {
+        "easy": [
+            {
+                "question": "Sample question",
+                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                "correctAnswer": "Option 1",
+                "trivia": "Explanation of the correct answer."
+            }
+        ],
+        "medium": [...],
+        "hard": [...]
+    }
 }
 ```
+
+## Customization
+
+The script provides trivia questions from various categories, such as:
+
+- Chart Success and Rankings
+- Song Lyrics and Meanings
+- Musical Elements
+- Production and Collaborations
+- Historical and Cultural Significance
+- Artist Inspirations
+- Critical Reception
+- Music Videos and Visuals
+- … and more
+
+You can expand or customize the list of categories in the script under the categories list.

@@ -28,7 +28,7 @@ cd music-trivia-generator
 2. Create virtual environment:
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+   # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
